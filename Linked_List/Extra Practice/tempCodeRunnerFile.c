@@ -1,0 +1,1 @@
+afterrhead -> next = NULL;
