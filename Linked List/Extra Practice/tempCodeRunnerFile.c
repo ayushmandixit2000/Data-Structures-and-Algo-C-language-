@@ -1,1 +1,0 @@
-afterrhead -> next = NULL;
