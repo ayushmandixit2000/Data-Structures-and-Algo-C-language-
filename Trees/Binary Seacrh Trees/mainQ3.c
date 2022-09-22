@@ -114,15 +114,22 @@ int isBST(BTNode *root){
         return 1;
     }
 
-    if (root->left != NULL && root->left->item > root->item){
+    BTNode *left = root -> left;
+    BTNode *right = root -> right;
+
+    if (left != NULL){
+        if(left->item > root->item){
         return 0;
+        }
     }
 
-    if (root->right != NULL && root->right->item <root->item){
+    if (right != NULL){
+        if(right->item <root->item){
         return 0;
+        }
     }
 
-    if (isBST(root->left) ==0 || isBST(root->right) ==0){
+    if (isBST(left) ==0 || isBST(right) ==0){
         return 0;
     }
 
