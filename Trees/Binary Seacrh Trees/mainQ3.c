@@ -109,30 +109,25 @@ void deleteTree(BTNode **root){
 }
 
 int isBST(BTNode *root){
-    
-    if(root == NULL){
+
+    if (root== NULL){
         return 1;
     }
 
-    BTNode *left = root -> left;
-    BTNode *right = root -> right;
-
-    if(left && right){ //if only one node with no children
-        return 1;
+    if (root->left != NULL && root->left->item > root->item){
+        return 0;
     }
 
-    if(right){ //if no left
-        return right -> item < root -> item?  0 : isBST(right);
+    if (root->right != NULL && root->right->item <root->item){
+        return 0;
     }
 
-    if(left){ //if no right
-        return left -> item < root -> item?  0 : isBST(left);
+    if (isBST(root->left) ==0 || isBST(root->right) ==0){
+        return 0;
     }
 
-    }
+    return 1;
 
-    //Write Your Code Here
-    return 0;
 }
 
 
