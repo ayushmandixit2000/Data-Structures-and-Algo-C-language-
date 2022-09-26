@@ -6,48 +6,35 @@ typedef struct _listnode{
     struct _listnode *next;
 } ListNode;
 
+int moveMaxToFront(ListNode **ptrHead);
 
 void printList(ListNode *cur);
 ListNode * findNode(ListNode *cur, int index);
 int insertNode(ListNode **ptrHead, int index, int item);
 void deleteList(ListNode **ptrHead);
 
-int split(ListNode *cur,ListNode **ptrEvenList,ListNode **ptrOddList);
-
 int main()
 {
     ListNode *head=NULL;
-    ListNode *oddHead = NULL;
-    ListNode *evenHead = NULL;
-
     int size =0;
     int item;
+    int index;
 
     printf("Enter a list of numbers, terminated by any non-digit character: \n");
     while(scanf("%d",&item))
         if(insertNode(&head,size, item)) size++;
     scanf("%*s");
 
-    printf("\nBefore split() is called:\n");
-    printf("The original list:\n");
     printList(head);
 
-    split(head, &evenHead, &oddHead);
+    printf("Before moveMaxToFront() is called:\n");
+    index = moveMaxToFront(&head);
 
-    printf("\nAfter split() was called:\n");
-    printf("The original list:\n");
+    printf("After moveMaxToFront() was called:\n");
+    printf("The original index of the node with the largest value: %d.\n",index);
     printList(head);
-	printf("The even list:\n");
-	printList(evenHead);
-	printf("The odd list:\n");
-	printList(oddHead);
 
-	if(head!=NULL)
-       deleteList(&head);
-    if(oddHead!=NULL)
-       deleteList(&oddHead);
-    if(evenHead!=NULL)
-       deleteList(&evenHead);
+    deleteList(&head);
     return 0;
 }
 
@@ -106,7 +93,37 @@ void deleteList(ListNode **ptrHead){
 	*ptrHead=NULL;
 }
 
-int split(ListNode *cur, ListNode **ptrEvenList,ListNode **ptrOddList)
-{
+int moveMaxToFront(ListNode **ptrHead){
+    ListNode *maxindex = *ptrHead;
+    ListNode *cur = *ptrHead;
+    ListNode *cur1 = *ptrHead;
+
+    if(*ptrHead == NULL){
+        return -1;
+    }
+
+    while(cur != NULL){
+        if(cur -> item > maxindex -> item){
+            maxindex = cur;
+        }
+        cur = cur -> next;
+    }
+
+    int index = 0;
+
+    if(*ptrHead == maxindex){
+        return 0;
+    }
+    
+    while(cur1 ->next != maxindex){
+        cur1 = cur1->next;
+        index++;
+    }
+
+    index++;
+    cur1 -> next = cur1 -> next -> next;
+    insertNode(ptrHead, 0, maxindex -> item);
+
+    return index;
 
 }

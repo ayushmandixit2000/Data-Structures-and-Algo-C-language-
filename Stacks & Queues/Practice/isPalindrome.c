@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
 typedef struct _listnode{
-    int item;
+    char item;
     struct _listnode *next;
 } ListNode;
 typedef ListNode StackNode;
@@ -10,69 +12,56 @@ typedef ListNode QueueNode;
 
 typedef struct _linkedlist{
    int size;
-   StackNode *head;
-} LinkedList, Stack;
+   ListNode *head;
+} Stack;
 
 typedef struct _queue{
    int size;
-   QueueNode *head;
-   QueueNode *tail;
+   ListNode *head;
+   ListNode *tail;
 } Queue;
 
 //Prototypes of Interface functions for Stack structure
-void push(Stack *sPtr, int item);
+void push(Stack *sPtr, char item);
 int pop(Stack *sPtr);
-int peek(Stack s);
+char peek(Stack s);
 int isEmptyStack(Stack s);
 void deleteStack(Stack *sPtr);
 
 //Prototypes of Interface functions for Queue structure
-void enqueue(Queue *qPtr, int item);
+void enqueue(Queue *qPtr, char item);
 int dequeue(Queue *qPtr);
-int getFront(Queue q);
+char getFront(Queue q);
 int isEmptyQueue(Queue q);
 void deleteQueue(Queue *qPtr);
 
-void reverseStack(Stack *s);
-
-void printList(LinkedList ll);
+int palindrome(Queue* wordPtr);
 
 int main()
 {
-    Stack s;
-    s.head = NULL;
-    s.size = 0;
+    char item;
+    Queue word;
+    word.head=NULL;
+    word.tail=NULL;
+    word.size=0;
 
-    int item;
+    printf("Enter a string of characters, terminated by a newline:\n");
+    while(1){
+        scanf("%c",&item);
+        if(item=='\n') break;
+        enqueue(&word,item);
+    }
 
-    printf("Enter a list of numbers, terminated by any non-digit character: \n");
-    while(scanf("%d",&item))
-        push(&s,item);
-    scanf("%*s");
-
-    printf("Before reverseStack() is called:\n");
-    printList((LinkedList)s);
-    reverseStack(&s);
-    printf("After reverseStack() was called:\n");
-    printList((LinkedList)s);
+    printf("The string is ");
+    printf("%s",palindrome(&word)? "":"not ");
+    printf("a palindrome.\n");
 
     return 0;
 }
 
-void printList(LinkedList ll){
-        ListNode *cur = ll.head;
-        printf("Current List has %d elements: ",ll.size);
-
-        while (cur != NULL){
-            printf("%d ", cur->item);
-            cur = cur->next;
-        }
-        printf("\n");
-}
-
-void push(Stack *sPtr, int item){
+void push(Stack *sPtr, char item){
     StackNode *newNode;
-    newNode= (StackNode *)malloc(sizeof(StackNode));
+    newNode= malloc(sizeof(StackNode));
     newNode->item = item;
     newNode->next = sPtr->head;
     sPtr->head = newNode;
@@ -92,7 +81,7 @@ int pop(Stack *sPtr){
     }
 }
 
-int peek(Stack s){
+char peek(Stack s){
     return s.head->item;
 }
 
@@ -105,9 +94,9 @@ void deleteStack(Stack *sPtr){
      while(pop(sPtr));
 }
 
-void enqueue(Queue *qPtr, int item){
+void enqueue(Queue *qPtr, char item){
     QueueNode *newNode;
-    newNode = malloc(sizeof(QueueNode));
+    newNode = (QueueNode *) malloc(sizeof(QueueNode));
     newNode->item = item;
     newNode->next = NULL;
 
@@ -136,7 +125,7 @@ int dequeue(Queue *qPtr){
     }
 }
 
-int getFront(Queue q){
+char getFront(Queue q){
     return q.head->item;
 }
 
@@ -149,10 +138,47 @@ void deleteQueue(Queue *qPtr)
     while(dequeue(qPtr));
 }
 
-void reverseStack(Stack *sPtr)
-{
-//Write your code here
+int palindrome(Queue* wordPtr){
 
+    // forming a stack based on the queue
+    Stack stack1;
+    stack1.head = NULL;
+    stack1.size = 0;
+    ListNode *cur = wordPtr->head;
 
+    while(cur != NULL){
+        push(&stack1, cur->item);
+        cur = cur->next;
+        stack1.size++;
+    }
 
+    // there is a queue in original order and a stack in reverse order. We can start comparison while accounting for spaces
+
+    while(wordPtr->head != NULL && stack1.head != NULL){
+
+        //remove spaces before comparison;
+        while(getFront(*wordPtr) == ' '){
+            dequeue(wordPtr);
+        }
+
+        while(peek(stack1) == ' '){
+            pop(&stack1);
+        }
+
+        //comparison starts, take note we have to account for caps here
+
+        if(tolower(getFront(*wordPtr)) == tolower(peek(stack1))){
+            dequeue(wordPtr);
+            pop(&stack1);
+        }
+
+        else{
+            return 0;
+        }
+
+        
+
+    }
+    return 1;
 }
+

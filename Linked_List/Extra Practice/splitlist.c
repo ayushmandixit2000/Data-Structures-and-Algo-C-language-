@@ -11,12 +11,15 @@ void printList(ListNode *cur);
 ListNode * findNode(ListNode *cur, int index);
 int insertNode(ListNode **ptrHead, int index, int item);
 void deleteList(ListNode **ptrHead);
-int duplicateReverse(ListNode *cur,ListNode **ptrNewHead);
+
+int split(ListNode *cur,ListNode **ptrEvenList,ListNode **ptrOddList);
 
 int main()
 {
     ListNode *head=NULL;
-    ListNode *dupRevHead=NULL;
+    ListNode *oddHead = NULL;
+    ListNode *evenHead = NULL;
+
     int size =0;
     int item;
 
@@ -25,21 +28,26 @@ int main()
         if(insertNode(&head,size, item)) size++;
     scanf("%*s");
 
-    printf("\nBefore duplicateReverse() is called:\n");
-    printList(head);
-
-    duplicateReverse(head,&dupRevHead);
-
-    printf("\nAfter duplicateReverse() was called:\n");
+    printf("\nBefore split() is called:\n");
     printf("The original list:\n");
     printList(head);
-    printf("The duplicated reverse list:\n");
-    printList(dupRevHead);
 
-    if(head!=NULL)
+    split(head, &evenHead, &oddHead);
+
+    printf("\nAfter split() was called:\n");
+    printf("The original list:\n");
+    printList(head);
+	printf("The even list:\n");
+	printList(evenHead);
+	printf("The odd list:\n");
+	printList(oddHead);
+
+	if(head!=NULL)
        deleteList(&head);
-    if(dupRevHead)
-       deleteList(&dupRevHead);
+    if(oddHead!=NULL)
+       deleteList(&oddHead);
+    if(evenHead!=NULL)
+       deleteList(&evenHead);
     return 0;
 }
 
@@ -98,7 +106,34 @@ void deleteList(ListNode **ptrHead){
 	*ptrHead=NULL;
 }
 
-int duplicateReverse(ListNode *cur,ListNode **ptrNewHead)
+int split(ListNode *cur, ListNode **ptrEvenList,ListNode **ptrOddList)
 {
+
+int num = 0;
+int num1 = 0;
+int num2 = 0;
+ListNode *cur1 = cur;
+
+if(cur1 == NULL){
+    return 0;
+}
+
+while(cur1 != NULL){
+    
+    if(num % 2 == 0){
+        insertNode(ptrEvenList, num1, cur1 -> item);
+        num1++;
+    }
+
+    else{
+        insertNode(ptrOddList, num2, cur1 -> item);
+        num2++;
+    }
+
+    num++;
+    cur1 = cur1 -> next;
+}
+
+return 1;
 
 }

@@ -11,12 +11,12 @@ typedef struct _linkedlist{
     int size;
 } LinkedList;
 
-void moveEvenItemsToBack(LinkedList *ll);
-
 void printList2(LinkedList ll);
 ListNode* findNode2(LinkedList ll, int index);
 int insertNode2(LinkedList *ll, int index, int item);
 void deleteList2(LinkedList *ptrHead);
+
+int removeNode2(LinkedList *ll,int index);
 
 int main()
 {
@@ -24,7 +24,7 @@ int main()
     ll.head =NULL;
     ll.size = 0;
     int item;
-
+    int index;
 
     printf("Enter a list of numbers, terminated by any non-digit character: \n");
     while(scanf("%d",&item))
@@ -36,9 +36,21 @@ int main()
 
     printList2(ll);
 
-    moveEvenItemsToBack(&ll);
+    while(1){
+        printf("Enter the index of the node to be removed: ");
+        scanf("%d",&index);
+
+        if(!removeNode2(&ll,index)){
+            printf("The node cannot be removed.\n");
+            break;
+        }
+
+        printf("After the removal operation,\n");
+        printList2(ll);
+    }
 
     printList2(ll);
+
     deleteList2(&ll);
     return 0;
 }
@@ -95,17 +107,31 @@ int insertNode2(LinkedList *ll, int index, int item){
 }
 
 void deleteList2(LinkedList *ll){
-    ListNode *cur = ll->head;
-    ListNode *temp;
-    while (cur!= NULL) {
-		temp=cur->next;
-		free(cur);
-		cur=temp;
-	}
-	ll->head = NULL;
-	ll->size = 0;
+    while (removeNode2(ll,0));
 }
 
-void moveEvenItemsToBack(LinkedList *ll){
+int removeNode2(LinkedList *ll,int index)
+{
+    if(ll -> head == NULL || ll -> size == 0 || index < 0 || index > ll -> size - 1){
+        return 0;
+    }
 
+    else if(index == 0){
+        ListNode *cur = ll -> head;
+        ll -> head = cur -> next;
+        ll -> size--;
+        return 1;
+    }
+
+    else{
+    ListNode *temp = ll -> head;
+    
+    while(index - 1 > 0){
+        temp = temp -> next;
+        index --;
+    }
+    temp -> next = temp -> next -> next;
+    ll -> size--;
+    return 1;
+    }
 }

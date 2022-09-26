@@ -6,35 +6,40 @@ typedef struct _listnode{
     struct _listnode *next;
 } ListNode;
 
-int moveMaxToFront(ListNode **ptrHead);
 
 void printList(ListNode *cur);
 ListNode * findNode(ListNode *cur, int index);
 int insertNode(ListNode **ptrHead, int index, int item);
 void deleteList(ListNode **ptrHead);
+int duplicateReverse(ListNode *cur,ListNode **ptrNewHead);
 
 int main()
 {
     ListNode *head=NULL;
+    ListNode *dupRevHead=NULL;
     int size =0;
     int item;
-    int index;
 
     printf("Enter a list of numbers, terminated by any non-digit character: \n");
     while(scanf("%d",&item))
         if(insertNode(&head,size, item)) size++;
     scanf("%*s");
 
+    printf("\nBefore duplicateReverse() is called:\n");
     printList(head);
 
-    printf("Before moveMaxToFront() is called:\n");
-    index = moveMaxToFront(&head);
+    duplicateReverse(head,&dupRevHead);
 
-    printf("After moveMaxToFront() was called:\n");
-    printf("The original index of the node with the largest value: %d.\n",index);
+    printf("\nAfter duplicateReverse() was called:\n");
+    printf("The original list:\n");
     printList(head);
+    printf("The duplicated reverse list:\n");
+    printList(dupRevHead);
 
-    deleteList(&head);
+    if(head!=NULL)
+       deleteList(&head);
+    if(dupRevHead)
+       deleteList(&dupRevHead);
     return 0;
 }
 
@@ -93,6 +98,17 @@ void deleteList(ListNode **ptrHead){
 	*ptrHead=NULL;
 }
 
-int moveMaxToFront(ListNode **ptrHead){
+int duplicateReverse(ListNode *cur,ListNode **ptrNewHead)
+{
+    if(cur == NULL){
+        return 0;
+    }
 
+
+    while(cur != NULL){
+        insertNode(ptrNewHead, 0, cur -> item);
+        cur = cur -> next;
+    }
+    
+    return 1;
 }

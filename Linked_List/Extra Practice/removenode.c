@@ -12,43 +12,40 @@ ListNode * findNode(ListNode *cur, int index);
 int insertNode(ListNode **ptrHead, int index, int item);
 void deleteList(ListNode **ptrHead);
 
-int concatenate(ListNode **ptrHead1, ListNode *head2);
+int removeNode(ListNode **ptrHead,int index);
 
 int main()
 {
-    ListNode *head1=NULL;
-    ListNode *head2=NULL;
-    int size1 =0;
-    int size2 =0;
+    ListNode *head=NULL;
+    int size =0;
     int item;
+    int index;
 
-    printf("Enter a list of numbers for head1, terminated by any non-digit character: \n");
+    printf("Enter a list of numbers, terminated by any non-digit character: \n");
     while(scanf("%d",&item))
-        if(insertNode(&head1,size1, item)) size1++;
+        if(insertNode(&head,size, item)) size++;
     scanf("%*s");
 
-    printf("Enter a list of numbers for head2, terminated by any non-digit character: \n");
-    while(scanf("%d",&item))
-        if(insertNode(&head2,size2, item)) size2++;
-    scanf("%*s");
+    printList(head);
 
-    printf("\nBefore concatenate() is called:\n");
-    printf("Head 1:\n");
-    printList(head1);
-    printf("Head 2:\n");
-    printList(head2);
+    while(1){
+        printf("Enter the index of the node to be removed: ");
+        scanf("%d",&index);
 
-    concatenate(&head1,head2);
+        if(removeNode(&head,index))
+            size--;
+        else{
+            printf("The node cannot be removed.\n");
+            break;
+        }
 
-    printf("\nAfter concatenate() was called:\n");
-    printf("Head 1:\n");
-    printList(head1);
-    printf("Head 2:\n");
-    printList(head2);
+        printf("After the removal operation,\n");
+        printList(head);
+    }
 
-    if(head1!=NULL)
-       deleteList(&head1); //it will remove head2 linked list
+    printList(head);
 
+    deleteList(&head);
     return 0;
 }
 
@@ -97,16 +94,44 @@ int insertNode(ListNode **ptrHead, int index, int item){
 }
 
 void deleteList(ListNode **ptrHead){
-    ListNode *cur = *ptrHead;
-    ListNode *temp;
-    while (cur!= NULL) {
-		temp=cur->next;
-		free(cur);
-		cur=temp;
-	}
-	*ptrHead=NULL;
+    while (removeNode(ptrHead,0));
 }
 
-int concatenate(ListNode **ptrHead1, ListNode *head2){
+int sizelist(ListNode **ptrhead);
+
+int sizelist(ListNode **ptrhead){
+    int num = 0;
+    ListNode *cur = *ptrhead;
+
+    while(cur != NULL){
+        num ++;
+        cur = cur -> next;
+    }
+    return num;
+}
+
+
+int removeNode(ListNode **ptrHead,int index)
+{
+if(*ptrHead == NULL || index < 0 || index > sizelist(ptrHead) - 1){
+    return 0;
+}
+
+if(index == 0){
+    *ptrHead = (*ptrHead) -> next;
+    return 1;
+}
+
+ListNode *cur = *ptrHead;
+int count = 0;
+
+while(count < index - 1){
+    cur = cur -> next;
+    count ++;
+}
+
+cur -> next = cur -> next -> next;
+
+return 1;
 
 }
