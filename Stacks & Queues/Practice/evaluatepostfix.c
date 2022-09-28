@@ -122,9 +122,9 @@ for(i = 2;i < length; i++){
 
     else{
         //double aei = postfix[i];
-        char ae = postfix[i];
-        char *str1 = &ae;
-        double ay1 = atof(str1);
+        // char ae = postfix[i];
+        // char *str1 = &ae;
+        double ay1 = postfix[i] - '0';
         push(&s, ay1);
     }
 }

@@ -227,13 +227,13 @@ int balanced(char *expression)
         }
 
 
-        if (justchar.size == 1){
-            if (peek(s) == '[' && getFront(justchar) == ']' || peek(s) == '{' && getFront(justchar) == '}' || peek(s) == '(' && getFront(justchar) == ')')
-            {
-                dequeue(&justchar);
-                pop(&s);
-            }
-        }
+        // if (justchar.size == 1){
+        //     if (peek(s) == '[' && getFront(justchar) == ']' || peek(s) == '{' && getFront(justchar) == '}' || peek(s) == '(' && getFront(justchar) == ')')
+        //     {
+        //         dequeue(&justchar);
+        //         pop(&s);
+        //     }
+        // }
 
     }
 

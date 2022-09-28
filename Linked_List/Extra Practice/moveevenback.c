@@ -108,29 +108,69 @@ void deleteList2(LinkedList *ll){
 
 void moveEvenItemsToBack(LinkedList *ll){ // will move odd items to the front
 
-ListNode *cur = ll -> head;
-int oddindex = 0;
+// ListNode *cur = ll -> head;
+// int oddindex = 0;
 
-if(cur ->next == NULL){
+// if(cur ->next == NULL){
+//     return;
+// }
+
+// if(cur -> item %2 == 0){
+//     oddindex = 0;
+// }
+// else{
+//     oddindex = 1;
+// }
+
+// while(cur -> next != NULL){
+//     if(cur -> next -> item % 2 != 0){
+//         insertNode2(ll, oddindex, cur -> next -> item);
+//         oddindex++;
+//         cur -> next = cur -> next -> next;
+//         ll -> size--;
+//     }
+
+//     cur = cur -> next;
+//}
+
+if(ll -> head == NULL || ll -> head -> next == NULL){
     return;
 }
 
-if(cur -> item %2 == 0){
-    oddindex = 0;
-}
-else{
-    oddindex = 1;
+ListNode *tail = ll -> head;
+
+while(tail -> next != NULL){
+    tail = tail -> next;
 }
 
-while(cur -> next != NULL){
-    if(cur -> next -> item % 2 != 0){
-        insertNode2(ll, oddindex, cur -> next -> item);
-        oddindex++;
-        cur -> next = cur -> next -> next;
-        ll -> size--;
+ListNode *cur = ll -> head;
+ListNode *pre = NULL;
+
+for(int i  = 0; i < ll -> size; i++){
+
+    if(cur -> item % 2 == 0){
+        
+        if(pre == NULL){
+            tail -> next = cur;
+            tail = tail -> next;
+            ll -> head = cur -> next;
+            cur = cur -> next;
+            tail -> next = NULL;
+        }
+
+        else{
+            tail -> next = cur;
+            tail = tail -> next;
+            pre -> next = cur -> next;
+            cur = cur -> next;
+            tail -> next = NULL;
+        }
+
     }
-
-    cur = cur -> next;
+    else{
+        pre = cur;
+        cur = cur -> next;
+    }
 }
 
 }

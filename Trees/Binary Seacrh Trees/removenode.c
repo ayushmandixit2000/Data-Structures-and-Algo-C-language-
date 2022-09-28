@@ -111,7 +111,7 @@ int removeBSTNode(BTNode **nodePtr, int item){
         return 0;
     }
 
-    if(item < (*nodePtr) -> item){
+    if(item < (*nodePtr) -> item){  //get to the item first
         num = removeBSTNode(&((*nodePtr) -> left), item);
     }
 
@@ -120,7 +120,7 @@ int removeBSTNode(BTNode **nodePtr, int item){
     }
 
     else{ //they are the same value
-        if((*nodePtr) -> left == NULL && (*nodePtr) -> right == NULL){ //if no child
+        if((*nodePtr) -> left == NULL && (*nodePtr) -> right == NULL){ //if no child, we can just assign node to be null
             (*nodePtr) = NULL;
             return 1;
         }

@@ -7,28 +7,51 @@ typedef struct _btnode{
     struct _btnode *right;
 } BTNode;
 
-void insertBSTNode(BTNode** cur, int item);
-void printBTNode(BTNode *root, int space, int left);
+BTNode* insertBTNode(BTNode* cur, int item);
+void printBTNode(BTNode *root, int space,int left);
 void deleteTree(BTNode **root);
+
+void printSmallerValues(BTNode *node, int m);
 
 int main()
 {
-    BTNode* root = NULL;
+    BTNode* root=NULL;
     int item;
 
     printf("Enter a list of numbers for a Binary Tree, terminated by any non-digit character: \n");
     while(scanf("%d",&item))
-        insertBSTNode(&root, item);
+        root = insertBTNode(root, item);
     scanf("%*s");
 
-    printf("The Binary Search Tree:\n");
+    printf("The Binary Tree:\n");
     printBTNode(root,0,0);
+
+    printf("Enter an integer:\n");
+    scanf("%d",&item);
+    printf("Smaller number(s) in the tree:\n");
+    printSmallerValues(root, item);
+    printf("\n");
 
     deleteTree(&root);
     root=NULL;
+
     return 0;
 }
 
+BTNode* insertBTNode(BTNode* cur, int item){
+    if (cur == NULL){
+	BTNode* node = (BTNode*) malloc(sizeof(BTNode));
+	node->item = item;
+	node->left = node->right = NULL;
+	return node;
+	}
+    if (rand()%2)
+        cur->left  = insertBTNode (cur->left, item);
+    else
+        cur->right = insertBTNode (cur->right, item);
+
+    return cur;
+}
 void printBTNode(BTNode *root,int space,int left){
       if (root != NULL)
       {
@@ -63,29 +86,17 @@ void deleteTree(BTNode **root){
 	}
 }
 
-void insertBSTNode(BTNode** cur, int item){
-    if(*cur!= NULL){
-    if(item == (*cur) -> item){
-        printf(" Brother %d is a dupilicate\n" , item);
-        return;
-        }
-    }
+void printSmallerValues(BTNode *node, int m){
+ //Write your code here
+ if(node == NULL){
+    return;
+ }
 
-    if( *cur == NULL){
-        BTNode *newnode = malloc(sizeof(BTNode));
-        newnode -> item = item;
-        newnode -> left = newnode -> right = NULL;
-        *cur = newnode;
-    }
+ if(node -> item < m){
+    printf("%d\n", node -> item);
+ }
 
+printSmallerValues(node -> left, m);
+printSmallerValues(node -> right, m);
 
-    if (item < (*cur) -> item){
-        insertBSTNode (&((*cur) -> left), item);
-    }
-
-    else if(item > (*cur) -> item){
-        insertBSTNode (&((*cur) -> right), item);
-    }
-  
-    //Write Your Code Here
 }

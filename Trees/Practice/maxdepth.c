@@ -11,15 +11,12 @@ BTNode* insertBTNode(BTNode* cur, int item);
 void printBTNode(BTNode *root, int space,int left);
 void deleteTree(BTNode **root);
 
-BTNode *searchNode(BTNode *node, int key);
+int maxDepth(BTNode *node);
 
 int main()
 {
     BTNode* root=NULL;
     int item;
-
-    BTNode* snode;
-    int key;
 
     printf("Enter a list of numbers for a Binary Tree, terminated by any non-digit character: \n");
     while(scanf("%d",&item))
@@ -29,17 +26,7 @@ int main()
     printf("The Binary Tree:\n");
     printBTNode(root,0,0);
 
-
-    printf("Please enter a value to search:");
-    scanf("%d",&key);
-    snode = searchNode(root,key);
-
-    if(snode != NULL){
-        printf("The node is found.\n");
-    }
-    else{
-        printf("The node is not found.\n");
-    }
+    printf("The maximum depth of the binary tree is: %d\n",maxDepth(root));
 
     deleteTree(&root);
     root=NULL;
@@ -96,7 +83,14 @@ void deleteTree(BTNode **root){
 }
 
 
-BTNode *searchNode(BTNode *node, int key)
-{
-  //Write your code here
+int maxDepth(BTNode *node){
+//Write your code here
+    if(node == NULL){
+        return -1;
+    }
+
+    int l = maxDepth(node -> left);
+    int r = maxDepth(node -> right);
+    int c = l > r ? l : r;
+    return c + 1;
 }

@@ -121,4 +121,18 @@ void deleteTree(BTNode **root){
 
 void rotateRNode(BTNode **node){
 //Write Your Code Here
+if((*node) == NULL) return;     //special case: the node is NULL---no need to right rotate!
+
+BTNode *x = (*node)->left;
+BTNode *xRChild;
+
+if(x!=NULL){
+    xRChild= x->right;}
+    else return;
+    //begin to implement right rotation w.r.t. **node
+    (*node)->left = xRChild;    //1.(*x)'s right child becomes (**node)'s left child
+    x->right = *node;           //2.(**node) becomes (*x)'s right child
+
+    (*node) = x;                //3. node (*x) now occupies the position of the original (**node)
+
 }
