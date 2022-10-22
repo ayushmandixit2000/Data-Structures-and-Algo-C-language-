@@ -141,6 +141,8 @@ ListNode* HashSearch(HashTable Q3Hash, int key)
     return NULL;
 }
 
+
+
 int HashInsert(HashTable* Q3HashPtr, int key)
 {
     //write your code here
