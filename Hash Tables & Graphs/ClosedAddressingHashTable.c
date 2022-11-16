@@ -116,59 +116,111 @@ int Hash(int key,int hSize)
 
 ListNode* HashSearch(HashTable Q3Hash, int key)
 {
-    //write your code here
-    int index;
-    ListNode *temp;
 
-    if(Q3Hash.hSize != 0){
-        index = Hash(key, Q3Hash.hSize); //with hash we found the index of the linkedlistn where key is stored
-    }
-    else{
+    if(Q3Hash.hSize <= 0){
         return NULL;
     }
 
-    temp = Q3Hash.Table[index].head; //temp points to the head of the linkedlist
+
+    int index;
+
+    index = hash(key, Q3Hash.hSize);
+
+    ListNode *temp = Q3Hash.Table[index].head;
 
     while(temp != NULL){
         if(temp -> key == key){
             return temp;
         }
+
         else{
             temp = temp -> next;
         }
     }
 
     return NULL;
+
+    // //write your code here
+    // int index;
+    // ListNode *temp;
+
+    // if(Q3Hash.hSize != 0){
+    //     index = Hash(key, Q3Hash.hSize); //with hash we found the index of the linkedlistn where key is stored
+    // }
+    // else{
+    //     return NULL;
+    // }
+
+    // temp = Q3Hash.Table[index].head; //temp points to the head of the linkedlist
+
+    // while(temp != NULL){
+    //     if(temp -> key == key){
+    //         return temp; //return temp when found
+    //     }
+    //     else{
+    //         temp = temp -> next;
+    //     }
+    // }
+    // return NULL;
 }
 
 
 
 int HashInsert(HashTable* Q3HashPtr, int key)
 {
-    //write your code here
-    int index;
-    ListNode *newnode;
 
-    if (HashSearch(*Q3HashPtr, key) != NULL){ //return 0 if the key already exists in the hashtable
+    if(Q3HashPtr -> hSize <= 0){
         return 0;
     }
 
-    if(Q3HashPtr -> hSize != 0){
-        index = Hash(key, Q3HashPtr -> hSize);
+    if(HashSearch(*Q3HashPtr,key) != NULL){ //only insert if key does not already exist
+        return 0;
     }
+    
+    
+    int index;
 
-    //The key is inserted from the front
-    //Initialise a node containing the key first
+    index = hash(key, Q3HashPtr->hSize);
+    
+    ListNode *temp = (ListNode *)malloc(sizeof(ListNode));
 
-    newnode = (ListNode *) malloc(sizeof(ListNode));
-    newnode -> key = key;
-    newnode -> next = Q3HashPtr -> Table[index].head;
-    Q3HashPtr -> Table[index].head = newnode;
+    temp -> key = key;
+
+    temp -> next = Q3HashPtr ->Table[index].head;
+
+    Q3HashPtr ->Table[index].head = temp;
 
     Q3HashPtr -> Table[index].size++;
-    Q3HashPtr -> nSize++;
 
+    Q3HashPtr -> nSize ++;
+    
     return 1;
+    
+    
+    //write your code here
+    // int index;
+    // ListNode *newnode;
+
+    // if (HashSearch(*Q3HashPtr, key) != NULL){ //return 0 if the key already exists in the hashtable
+    //     return 0;
+    // }
+
+    // if(Q3HashPtr -> hSize != 0){
+    //     index = Hash(key, Q3HashPtr -> hSize);
+    // }
+
+    // //The key is inserted from the front
+    // //Initialise a node containing the key first
+
+    // newnode = (ListNode *) malloc(sizeof(ListNode)); //new node has to be created
+    // newnode -> key = key;
+    // newnode -> next = Q3HashPtr -> Table[index].head; //insert this newnode at the head
+    // Q3HashPtr -> Table[index].head = newnode; //set the head
+
+    // Q3HashPtr -> Table[index].size++; //update size of both
+    // Q3HashPtr -> nSize++;
+
+    // return 1;
 }
 
 void HashPrint(HashTable Q3Hash)

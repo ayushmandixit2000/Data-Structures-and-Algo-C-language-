@@ -1,21 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-typedef struct _listnode //listnode has attributes vertex and a next pointer
+typedef struct _listnode
 {
     int vertex;
 	struct _listnode *next;
 } ListNode;
 
-typedef struct _graph{ //graph has attributes Vertex, edges, visited? and matrix
+typedef struct _graph{
     int V;
     int E;
     int *visited;
     int **matrix;
 }Graph;
 
-typedef ListNode QueueNode; //normal queue
+typedef ListNode QueueNode;
 
 typedef struct _queue{
    int size;
@@ -23,7 +22,7 @@ typedef struct _queue{
    QueueNode *tail;
 } Queue;
 
-// void BFS (Graph G, int v);
+int SD (Graph G);
 
 void printGraphMatrix(Graph );
 
@@ -33,7 +32,7 @@ int dequeue(Queue *qPtr);
 int getFront(Queue q);
 int isEmptyQueue(Queue q);
 void removeAllItemsFromQueue(Queue *qPtr);
-int BFS(Graph g);
+
 int main()
 {
     Graph g;
@@ -66,80 +65,55 @@ int main()
         }
         else
             break;
-        printf("Enter two vertices which are adjacent to each other:\n");
+        printf("Enter two vertices which are adjacent to each other: (press a to stop)\n");
     }
     scanf("%*c");
-    printf("Enter a start vertex for BFS:\n");
-    scanf("%d", &i);
-    printGraphMatrix(g);
-    //BFS(g,i);
-    printf("%d", BFS(g));
-    return BFS(g);
+    // printGraphMatrix(g);
+    
+    printf("Enter two vertices for finding their shortest distance: (press a to stop)\n");
+    scanf("%d %d", &i, &j);
 
+    int d = SD(g);
+    if(d==-1)
+        printf("%d and %d are unconnected.\n",i,j);
+    else
+        printf("The largest graph is %d\n",d);
+    return 0;
 }
 
-// void BFS(Graph g, int v){
-//     // Write your code here
-    
-//     // Queue q;
-//     // q.head = NULL;
-//     // q.tail = NULL;
-//     // q.size = 0;
+int SD(Graph g){
+    // Write your code here
+    int maxsize = 0;
 
-//     // int w;
-//     // int i;
+    for(int i = 0; i <g.V; i++){
+        Queue q;
+        q.size = 0;
+        q.head = NULL;
+        q.tail = NULL;
 
+        for(int k = 0; k<g.V; k++){
+            g.visited[k] = 0;
+        }
 
-//     // enqueue(&q, v);
-//     // g.visited[v-1] =  1;
-//     // printf("%d" , v);
+        enqueue(&q, i+1);
+        g.visited[i] = 1;
+        int count = 1;
 
-//     // while(q.size > 0){
-//     //     w = dequeue(&q);
+        while(q.size > 0){
+            int w = dequeue(&q);
 
-//     //     for(i = 0; i < g.V; i++){
-//     //         if(g.matrix[w-1][i] == 1 && g.visited[i] == 0){
-//     //             g.visited[i] = 1;
-//     //             printf("%d", i+1);
-//     //             enqueue(&q, i+1); //i is a graph matrix indeitfier, i+1 is the actual vertic
-//     //         }
-//     //     }
-//     // }
-// }
-
-int BFS(Graph g){
-    
-    int max = 0;
-
-    for (int v = 0; v < g.V; v++){
-
-    int count = 1;
-    Queue q;
-    q.head = NULL;
-    q.tail = NULL;
-    q.size = 0;
-
-    int w;
-    int i;
-
-    enqueue(&q, v+1);
-    g.visited[v] =  1;
-    //printf("%d" , v);
-
-    while(q.size > 0){
-        w = dequeue(&q);
-        for(i = 0; i < g.V; i++){
-            if(g.matrix[w-1][i] == 1 && g.visited[i] == 0){
-                count++;
-                g.visited[i] = 1;
-                //printf("%d", i+1);
-                enqueue(&q, i+1); //i is a graph matrix indeitfier, i+1 is the actual vertic
+            for(int r = 0; r < g.V; r++){
+                if(g.matrix[w-1][r] == 1 && g.visited[r] == 0){
+                    g.visited[r] = 1;
+                    enqueue(&q, r+1);
+                    count++;
+                }
             }
         }
+        maxsize = maxsize > count? maxsize : count;
     }
-    max = count > max? count: max;
-    }
-    return max;
+
+    return maxsize;
 }
 
 void printGraphMatrix(Graph g)

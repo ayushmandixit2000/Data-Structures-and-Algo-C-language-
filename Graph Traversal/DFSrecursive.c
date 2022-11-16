@@ -65,11 +65,10 @@ int main()
 
 void DFS_R(Graph g, int v)
 {
-    int i;
     g.visited[v-1] = 1;
     printf("%d", v);
 
-    for(i=0; i<g.V;i++){
+    for(int i=0; i<g.V;i++){
         if(g.matrix[v-1][i] == 1 && g.visited[i] == 0){
             DFS_R(g, i+1);
         }

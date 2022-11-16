@@ -32,7 +32,7 @@ void removeAllItemsFromStack(Stack *sPtr);
 void printGraphMatrix(Graph );
 ////////////////////////////////////////////
 
-void DFS_I (Graph , int );
+int Connected (Graph);
 
 int main()
 {
@@ -57,69 +57,91 @@ int main()
     
     
     int V1, V2;
-    printf("Enter two vertices which are adjacent to each other:\n");
+    printf("Enter a directed edge: (press a to stop)\n");
     while(scanf("%d %d",&V1,&V2)==2)
     {
         if(V1>0 && V1<=g.V && V2>0 && V2<=g.V)
         {
             g.matrix[V1-1][V2-1] = 1;
-            g.matrix[V2-1][V1-1] = 1;
             g.E++;
         }
         else
             break;
-        printf("Enter two vertices which are adjacent to each other:\n");
+        printf("Enter a directed edge: (press a to stop)\n");
     }
     scanf("%*c");
-    printf("Enter a start vertex for DFS:\n");
-    scanf("%d", &i);
     
-    printGraphMatrix(g);
-    DFS_I(g,i);
+    
+    int res = Connected(g);
+    if(res == 1)
+        printf("The graph is strongly connected.\n");
+    else
+        printf("The graph is not strongly connected.\n");
 
     return 0;
 }
 
-void DFS_I (Graph g, int v)
+int Connected (Graph g)
 {
-    Stack s;
-    s.size == 0;
-    s.head = NULL;
-
-    push(&s, v);
-    g.visited[v-1] = 1;
-
     
-    
-    while(s.size > 0){
-        int w = peek(s);
+    //strongly connected means every node can reach every node. As such we need an external for loop
 
-        int stopnode = 0;
-
-        for(int i = 0; i < g.V; i++){
-            if(g.matrix[w-1][i] == 1 && g.visited[i] == 0){
-                push(&s, i+1);
-                g.visited[i] = 1;
-                stopnode = 1;
-                break;
+    for(int i = 0; i < g.V; i++){
+        //need to clear visited
+        for(int c = 0; c < g.V; c++){
+            g.visited[c] = 0;
+        }
+        int count = 1;
+        Stack s;
+        s.size = 0;
+        s.head = NULL;
+        push(&s, i+1);
+        g.visited[i] = 1;
+        while(s.size > 0){
+            int w = peek(s);
+            int stopnode  = 0;
+            for(int a = 0; a < g.V; a++){
+                if(g.matrix[w-1][a] == 1 && g.visited[a] == 0){
+                    stopnode = 1;
+                    g.visited[a] = 1;
+                    count++;
+                    push(&s, a+1);
+                    break;
+                }
+            }
+            if(stopnode == 0){
+                pop(&s);
             }
         }
-
-        if(stopnode == 0){
-            pop(&s);
+        if(count != g.V){
+            return 0;
         }
-    }  
+    }
+    return 1;
     
-    // Write your code here
+    
+    // //write your code here
+    // //if the graph is connected, all nodes will be visisted
     // Stack s;
+
+    // for(int j = 0; j < g.V; j++){
     // s.head = NULL;
     // s.size = 0;
     // int w;
     // int i;
 
+    // //need to univisit all
+
+    // for(int k = 0; k < g.V; k++){
+    //     g.visited[k] = 0;
+    // }
+
+    // int count = 1;
+
+    // int v = j + 1;
+
     // push(&s, v);
     // g.visited[v-1] = 1;
-    // printf("%d", v);
 
     // int stopnode; //to monitor when backtracking will start
 
@@ -131,8 +153,8 @@ void DFS_I (Graph g, int v)
     //     for(i = 0; i < g.V ; i++){ //when first adjacent with univisited is found we push it
     //         if(g.matrix[w-1][i] == 1 && g.visited[i] == 0){
     //             push(&s, i+1);
+    //             count++;
     //             g.visited[i] = 1;
-    //             printf("%d", i+1);
     //             stopnode = 1;
     //             break;
     //         }
@@ -142,7 +164,16 @@ void DFS_I (Graph g, int v)
     //         pop(&s);
     //     }
     // }
+
+
+    // if (count != g.V){
+    //     return 0;
+    // }
+
+    // } 
+    // return 1;
 }
+
 
 void printGraphMatrix(Graph g)
 {
